@@ -26,21 +26,7 @@
 						<input type="text" class="input-text" id="coursename" v-model="coursename" placeholder="请输入课程名">
 					</div>
 				</div>
-				<div class="row cl">
-					<label class="form-label col-xs-4 col-sm-3">教师：</label>
-					<div class="formControls col-xs-8 col-sm-9">
-						<input type="text" class="input-text" id="teachername" v-model="teachername" placeholder="请输入教师">
-					</div>
-				</div>
-				<div class="row cl">
-					<label class="form-label col-xs-4 col-sm-3">上课班级：</label>
-					<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
-							<select class="select" v-model="clazzid">
-								<option :value="0">---请选择上课班级---</option>
-								<option :value="item.clazzid" v-for="item in clazz">{{ item.clazzname }}</option>
-							</select>
-						</span> </div>
-				</div>
+
 				<div class="row cl">
 					<label class="form-label col-xs-4 col-sm-3">学分：</label>
 					<div class="formControls col-xs-8 col-sm-9">
@@ -80,8 +66,6 @@
 			data: { //定义数据
 				cno: '', // 定义课程号数据
 				coursename: '', // 定义课程名数据
-				teachername: '', // 定义教师数据
-				clazzid: '0', // 定义上课班级数据
 				num: '', // 定义学分数据
 				memo: '', // 定义备注数据
 				clazz: {}, // 用来保存上课班级对象数据
@@ -92,8 +76,6 @@
 					var data = {
 						cno: _this.cno,
 						coursename: _this.coursename,
-						teachername: _this.teachername,
-						clazzid: _this.clazzid,
 						num: _this.num,
 						memo: _this.memo,
 					};
@@ -119,8 +101,6 @@
 						this.cno = result.data.cno;
 					});
 					this.coursename= '';
-					this.teachername= '';
-					this.clazzid= '0';
 					this.num= '';
 					this.memo= '';
 				},

@@ -8,25 +8,22 @@
 		<id property="courseid" column="courseid" />
 		<result property="cno" column="cno" />
 		<result property="coursename" column="coursename" />
-		<result property="teachername" column="teachername" />
-		<result property="clazzid" column="clazzid" />
 		<result property="num" column="num" />
 		<result property="addtime" column="addtime" />
 		<result property="memo" column="memo" />
-		<result property="clazzname" column="clazzname" />
-		<!-- 通过外键关联查询 返回封装Clazz对象 -->
-		<association property="clazz" column="clazzid" select="com.dao.ClazzDAO.getClazzById" javaType="com.entity.Clazz" />
+
+
 	</resultMap>
 
 	<!-- 课程表 插入SQL语句 CourseDAO通过ID(insertCourse)调用此配置 -->
 	<insert id="insertCourse" parameterType="course">
-		insert into course(courseid , cno , coursename , teachername , clazzid , num , addtime , memo ) values(#{courseid} , #{cno} , #{coursename} , #{teachername} ,
-		#{clazzid} , #{num} , #{addtime} , #{memo} )
+		insert into course(courseid , cno , coursename , teachername , clazzid , num , addtime , memo ) values(#{courseid} , #{cno} , #{coursename} ,
+	#{num} , #{addtime} , #{memo} )
 	</insert>
 
 	<!-- 课程表 更新SQL语句 CourseDAO通过ID(updateCourse)调用此配置 -->
 	<update id="updateCourse" parameterType="course">
-		update course set cno=#{cno} , coursename=#{coursename} , teachername=#{teachername} , clazzid=#{clazzid} ,
+		update course set cno=#{cno} , coursename=#{coursename} ,
 		num=#{num} , addtime=#{addtime} , memo=#{memo} where courseid=#{courseid}
 	</update>
 
@@ -37,18 +34,18 @@
 
 	<!-- 课程表 查询全部课程信息SQL语句 CourseDAO通过ID(getAllCourse)调用此配置 -->
 	<select id="getAllCourse" resultMap="courseMap">
-		select a.* , b.clazzname from course a , clazz b where 1=1 and a.clazzid = b.clazzid order by courseid desc
+		select * from course  where 1=1  order by courseid desc
 	</select>
 
 	<!-- 课程表 按主键(courseid)查询SQL语句 CourseDAO通过ID(getCourseById)调用此配置 -->
 	<select id="getCourseById" parameterType="String" resultMap="courseMap">
-		select a.* , b.clazzname from course a , clazz b where 1=1 and a.clazzid = b.clazzid and
+		select *  from course  where 1=1  and
 		courseid=#{courseid} order by courseid desc
 	</select>
 
 	<!-- 课程表 按条件精确查询SQL语句 CourseDAO通过ID(getCourseByCond)调用此配置 -->
 	<select id="getCourseByCond" parameterType="course" resultMap="courseMap">
-		select a.* , b.clazzname from course a , clazz b where 1=1 and a.clazzid = b.clazzid
+		select *  from course  where 1=1
 		<if test="cno != null and '' != cno">
 			and a.cno = #{cno}
 		</if>
@@ -74,28 +71,11 @@
 
 	<!-- 课程表 按条件模糊查询SQL语句 CourseDAO通过ID(getCourseByLike)调用此配置 -->
 	<select id="getCourseByLike" parameterType="course" resultMap="courseMap">
-		select a.* , b.clazzname from course a , clazz b where 1=1 and a.clazzid = b.clazzid
-		<if test="cno != null and '' != cno">
-			and a.cno like CONCAT('%', CONCAT(#{cno}, '%'))
-		</if>
+		select *  from course where 1=1
 		<if test="coursename != null and '' != coursename">
-			and a.coursename like CONCAT('%', CONCAT(#{coursename}, '%'))
+			and coursename like CONCAT('%', CONCAT(#{coursename}, '%'))
 		</if>
-		<if test="teachername != null and '' != teachername">
-			and a.teachername like CONCAT('%', CONCAT(#{teachername}, '%'))
-		</if>
-		<if test="clazzid != null and '' != clazzid">
-			and b.clazzname like CONCAT('%', CONCAT(#{clazzid}, '%'))
-		</if>
-		<if test="num != null and '' != num">
-			and a.num like CONCAT('%', CONCAT(#{num}, '%'))
-		</if>
-		<if test="addtime != null and '' != addtime">
-			and a.addtime like CONCAT('%', CONCAT(#{addtime}, '%'))
-		</if>
-		<if test="memo != null and '' != memo">
-			and a.memo like CONCAT('%', CONCAT(#{memo}, '%'))
-		</if>
+
 	</select>
 </mapper>
 

@@ -4,6 +4,10 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -398,6 +402,11 @@ public class VeDate {
 			return false;
 		}
 		return true;
+	}
+
+	public static String getTimeStr(Integer time){
+		LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(time), ZoneId.systemDefault());
+		return localDateTime.format(DateTimeFormatter.ISO_DATE);
 	}
 }
 

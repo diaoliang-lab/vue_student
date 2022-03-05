@@ -74,28 +74,12 @@
 
 	<!-- 课程表 按条件模糊查询SQL语句 CourseDAO通过ID(getCourseByLike)调用此配置 -->
 	<select id="getCourseByLike" parameterType="course" resultMap="courseMap">
-		select a.* , b.clazzname from course a , clazz b where 1=1 and a.clazzid = b.clazzid
-		<if test="cno != null and '' != cno">
-			and a.cno like CONCAT('%', CONCAT(#{cno}, '%'))
-		</if>
+		select * from course where 1=1
+
 		<if test="coursename != null and '' != coursename">
-			and a.coursename like CONCAT('%', CONCAT(#{coursename}, '%'))
+			and coursename like CONCAT('%', CONCAT(#{coursename}, '%'))
 		</if>
-		<if test="teachername != null and '' != teachername">
-			and a.teachername like CONCAT('%', CONCAT(#{teachername}, '%'))
-		</if>
-		<if test="clazzid != null and '' != clazzid">
-			and b.clazzname like CONCAT('%', CONCAT(#{clazzid}, '%'))
-		</if>
-		<if test="num != null and '' != num">
-			and a.num like CONCAT('%', CONCAT(#{num}, '%'))
-		</if>
-		<if test="addtime != null and '' != addtime">
-			and a.addtime like CONCAT('%', CONCAT(#{addtime}, '%'))
-		</if>
-		<if test="memo != null and '' != memo">
-			and a.memo like CONCAT('%', CONCAT(#{memo}, '%'))
-		</if>
+
 	</select>
 </mapper>
 

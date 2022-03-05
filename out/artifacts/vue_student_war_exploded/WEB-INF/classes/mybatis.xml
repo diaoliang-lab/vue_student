@@ -15,6 +15,7 @@
 		<typeAlias alias="cate" type="com.entity.Cate" /><!-- 工作类型表别名为cate 映射类是 com.entity.Cate -->
 		<typeAlias alias="works" type="com.entity.Works" /><!-- 勤工俭学表别名为works 映射类是 com.entity.Works -->
 		<typeAlias alias="teacher" type="com.entity.Teacher" />
+		<typeAlias alias="teaching_info" type="com.entity.TeachingInfo" />
 	</typeAliases>
 
 	<!-- mappers 标签是用来配置需要加载的 SQL 映射配置文件路径 -->
@@ -29,6 +30,7 @@
 		<mapper resource="mapper/cate.xml" /> <!-- 工作类型映射文件 -->
 		<mapper resource="mapper/works.xml" /> <!-- 勤工俭学映射文件 -->
 		<mapper resource="mapper/teacher.xml" /> <!-- 勤工俭学映射文件 -->
+		<mapper resource="mapper/teachingInfo.xml" /> <!-- 勤工俭学映射文件 -->
 	</mappers>
 </configuration>
 

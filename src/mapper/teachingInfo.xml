@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置关于学生用户表的 MyBatis映射文件 -->
+<!-- namespace：必须与对应的接口全类名一致 id:必须与对应接口的某个对应的方法名一致 -->
+<mapper namespace="com.dao.TeachingInfoDAO">
+    <resultMap type="teachingInfo" id="teachingInfoMap">
+        <id property="id" column="id" />
+        <result property="clazzId" column="clazz_id" />
+        <result property="teacherId" column="teacher_id" />
+        <result property="courseId" column="course_id" />
+        <result property="beginTime" column="begin_time" />
+        <result property="endTime" column="end_time" />
+        <result property="username" column="username" />
+        <result property="courseName" column="coursename" />
+        <result property="clazzName" column="clazzname" />
+        <!-- 通过外键关联查询 返回封装Clazz对象 -->
+        <association property="teacher" column="id" select="com.dao.TeachersDAO.getTeacherById" javaType="com.entity.Teacher" />
+        <association property="clazz" column="clazzid" select="com.dao.ClazzDAO.getClazzById" javaType="com.entity.Clazz" />
+        <association property="course" column="courseid" select="com.dao.CourseDAO.getCourseById" javaType="com.entity.Course" />
+    </resultMap>
+
+    <select id="getAllTeachingInfo" resultMap="teachingInfoMap">
+        select a.*, b.clazzname, c.username  , d.coursename
+        from teaching_info a,
+             clazz b,
+             teacher c,
+             course d
+        where 1 = 1
+          and a.clazz_id= b.clazzid
+          and a.teacher_id = c.id
+          and a.course_id = d.courseid
+        order by id desc
+    </select>
+
+    <!-- 学生用户表 按主键删除SQL语句 UsersDAO通过ID(deleteUsers)调用此配置 -->
+    <delete id="deleteTeachingInfo" parameterType="String">
+        delete from teaching_info where id = #{id}
+    </delete>
+
+    <!-- 学生用户表 按主键(usersid)查询SQL语句 UsersDAO通过ID(getUsersById)调用此配置 -->
+    <select id="getTeachingInfoById" parameterType="String" resultMap="teachingInfoMap">
+        select a.*, b.clazzname, c.username, d.coursename
+        from teaching_info a,
+             clazz b,
+             teacher c,
+             course d
+        where 1 = 1
+          and a.clazz_id = b.clazzid
+          and a.teacher_id = c.id
+          and a.course_id = d.courseid
+          and id = #{id}
+        order by id desc
+    </select>
+
+    <!-- 学生用户表 按主键(usersid)查询SQL语句 UsersDAO通过ID(getUsersById)调用此配置 -->
+    <select id="getTeachingInfosByCourseId" parameterType="String" resultMap="teachingInfoMap">
+        select a.*, b.clazzname, c.username, d.coursename
+        from teaching_info a,
+             clazz b,
+             teacher c,
+             course d
+        where 1 = 1
+          and a.clazz_id = b.clazzid
+          and a.teacher_id = c.id
+          and a.course_id = d.courseid
+          and a.course_id = #{courseId}
+        order by id desc
+    </select>
+
+
+
+
+    <!--    &lt;!&ndash; 学生用户表 插入SQL语句 UsersDAO通过ID(insertUsers)调用此配置 &ndash;&gt;-->
+<!--    <insert id="insertUsers" parameterType="users">-->
+<!--        insert into users(usersid , username , password , realname , sex , birthday , clazzid , contact , address , regdate ) values(#{usersid} , #{username} , #{password}-->
+<!--                                                                                                                                    , #{realname} , #{sex} , #{birthday} , #{clazzid} , #{contact} , #{address} , #{regdate} )-->
+<!--    </insert>-->
+
+<!--    &lt;!&ndash; 学生用户表 更新SQL语句 UsersDAO通过ID(updateUsers)调用此配置 &ndash;&gt;-->
+<!--    <update id="updateUsers" parameterType="users">-->
+<!--        update users set username=#{username} , password=#{password} , realname=#{realname} , sex=#{sex} ,-->
+<!--                         birthday=#{birthday} , clazzid=#{clazzid} , contact=#{contact} , address=#{address} , regdate=#{regdate} where usersid=#{usersid}-->
+<!--    </update>-->
+
+<!--    &lt;!&ndash; 学生用户表 按主键删除SQL语句 UsersDAO通过ID(deleteUsers)调用此配置 &ndash;&gt;-->
+<!--    <delete id="deleteUsers" parameterType="String">-->
+<!--        delete from users where usersid = #{usersid}-->
+<!--    </delete>-->
+
+
+
+<!--    &lt;!&ndash; 学生用户表 按主键(usersid)查询SQL语句 UsersDAO通过ID(getUsersById)调用此配置 &ndash;&gt;-->
+<!--    <select id="getUsersById" parameterType="String" resultMap="usersMap">-->
+<!--        select a.* , b.clazzname from users a , clazz b where 1=1 and a.clazzid = b.clazzid and-->
+<!--            usersid=#{usersid} order by usersid desc-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash; 学生用户表 按条件精确查询SQL语句 UsersDAO通过ID(getUsersByCond)调用此配置 &ndash;&gt;-->
+<!--    <select id="getUsersByCond" parameterType="users" resultMap="usersMap">-->
+<!--        select a.* , b.clazzname from users a , clazz b where 1=1 and a.clazzid = b.clazzid-->
+<!--        <if test="username != null and '' != username">-->
+<!--            and a.username = #{username}-->
+<!--        </if>-->
+<!--        <if test="password != null and '' != password">-->
+<!--            and a.password = #{password}-->
+<!--        </if>-->
+<!--        <if test="realname != null and '' != realname">-->
+<!--            and a.realname = #{realname}-->
+<!--        </if>-->
+<!--        <if test="sex != null and '' != sex">-->
+<!--            and a.sex = #{sex}-->
+<!--        </if>-->
+<!--        <if test="birthday != null and '' != birthday">-->
+<!--            and a.birthday = #{birthday}-->
+<!--        </if>-->
+<!--        <if test="clazzid != null and '' != clazzid">-->
+<!--            and a.clazzid = #{clazzid}-->
+<!--        </if>-->
+<!--        <if test="contact != null and '' != contact">-->
+<!--            and a.contact = #{contact}-->
+<!--        </if>-->
+<!--        <if test="address != null and '' != address">-->
+<!--            and a.address = #{address}-->
+<!--        </if>-->
+<!--        <if test="regdate != null and '' != regdate">-->
+<!--            and a.regdate = #{regdate}-->
+<!--        </if>-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash; 学生用户表 按条件模糊查询SQL语句 UsersDAO通过ID(getUsersByLike)调用此配置 &ndash;&gt;-->
+<!--    <select id="getUsersByLike" parameterType="users" resultMap="usersMap">-->
+<!--        select a.* , b.clazzname from users a , clazz b where 1=1 and a.clazzid = b.clazzid-->
+<!--        <if test="username != null and '' != username">-->
+<!--            and a.username like CONCAT('%', CONCAT(#{username}, '%'))-->
+<!--        </if>-->
+<!--        <if test="password != null and '' != password">-->
+<!--            and a.password like CONCAT('%', CONCAT(#{password}, '%'))-->
+<!--        </if>-->
+<!--        <if test="realname != null and '' != realname">-->
+<!--            and a.realname like CONCAT('%', CONCAT(#{realname}, '%'))-->
+<!--        </if>-->
+<!--        <if test="sex != null and '' != sex">-->
+<!--            and a.sex like CONCAT('%', CONCAT(#{sex}, '%'))-->
+<!--        </if>-->
+<!--        <if test="birthday != null and '' != birthday">-->
+<!--            and a.birthday like CONCAT('%', CONCAT(#{birthday}, '%'))-->
+<!--        </if>-->
+<!--        <if test="clazzid != null and '' != clazzid">-->
+<!--            and b.clazzname like CONCAT('%', CONCAT(#{clazzid}, '%'))-->
+<!--        </if>-->
+<!--        <if test="contact != null and '' != contact">-->
+<!--            and a.contact like CONCAT('%', CONCAT(#{contact}, '%'))-->
+<!--        </if>-->
+<!--        <if test="address != null and '' != address">-->
+<!--            and a.address like CONCAT('%', CONCAT(#{address}, '%'))-->
+<!--        </if>-->
+<!--        <if test="regdate != null and '' != regdate">-->
+<!--            and a.regdate like CONCAT('%', CONCAT(#{regdate}, '%'))-->
+<!--        </if>-->
+<!--    </select>-->
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

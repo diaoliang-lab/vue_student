@@ -48,8 +48,6 @@ public class CourseController extends BaseController {
 		Course course = new Course();
 		course.setCno(obj.getString("cno")); // 为课程号赋值
 		course.setCoursename(obj.getString("coursename")); // 为课程名赋值
-		course.setTeachername(obj.getString("teachername")); // 为教师赋值
-		course.setClazzid(obj.getString("clazzid")); // 为上课班级赋值
 		course.setNum(obj.getString("num")); // 为学分赋值
 		course.setAddtime(VeDate.getStringDateShort()); // 为创建日期赋值
 		course.setMemo(obj.getString("memo")); // 为备注赋值
@@ -113,8 +111,6 @@ public class CourseController extends BaseController {
 		Course course = this.courseService.getCourseById(obj.getString("courseid")); // 获取object中courseid字段
 		course.setCno(obj.getString("cno")); // 为课程号赋值
 		course.setCoursename(obj.getString("coursename")); // 为课程名赋值
-		course.setTeachername(obj.getString("teachername")); // 为教师赋值
-		course.setClazzid(obj.getString("clazzid")); // 为上课班级赋值
 		course.setNum(obj.getString("num")); // 为学分赋值
 		course.setMemo(obj.getString("memo")); // 为备注赋值
 
@@ -168,7 +164,7 @@ public class CourseController extends BaseController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Page<Course> pager = com.github.pagehelper.PageHelper.startPage(page, limit);// 定义当前页和分页条数
 		Course course = new Course();
-		course.setClazzname(keywords);
+		course.setCoursename(keywords);
 		List<Course> list = this.courseService.getCourseByLike(course);
 		// 返回的map中定义数据格式
 		map.put("count", pager.getTotal());

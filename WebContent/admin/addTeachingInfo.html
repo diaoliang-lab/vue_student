@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>添加学生用户信息</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="./hui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="./hui/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="./hui/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="./hui/layui/css/layui.css" />
+</head>
+
+<body>
+
+<div id="app">
+    <article class="page-container">
+        <div class="form form-horizontal" id="form-admin-add">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">出生日期：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" id="birthday" v-model="birthday" placeholder="请输入出生日期" @click="getDate4()" readonly="readonly" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">授课班级：</label>
+                <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+							<select class="select" v-model="clazzid">
+								<option :value="0">---请选择班级---</option>
+								<option :value="item.clazzid" v-for="item in clazzs">{{ item.clazzname }}</option>
+							</select>
+						</span> </div>
+            </div>
+
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">授课教师：</label>
+                <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+							<select class="select" v-model="id">
+								<option :value="0">---请选择所在教师---</option>
+								<option :value="item.id" v-for="item in teachers">{{ item.username }}</option>
+							</select>
+						</span> </div>
+            </div>
+
+
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">授课课程：</label>
+                <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+							<select class="select" v-model="courseid">
+								<option :value="0">---请选择课程---</option>
+								<option :value="item.courseid" v-for="item in courses">{{ item.coursename }}</option>
+							</select>
+						</span> </div>
+            </div>
+
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                    <button class="btn btn-secondary radius" @click.prevent="save()"><i
+                            class="Hui-iconfont">&#xe632;</i>提交保存</button>
+                    <button class="btn btn-default radius" @click.prevent="reset()">
+                        <i class="Hui-iconfont">&#xe68f;</i>取消重置
+                    </button>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+
+<script type="text/javascript" src="./hui/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="./hui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="./hui/js/H-ui.admin.js"></script>
+
+<!--此页面业务相关的脚本-->
+<script type="text/javascript" src="./hui/layui/layui.js"></script>
+<script type="text/javascript" src="./hui/js/axios.min.js"></script>
+<script type="text/javascript" src="./hui/js/vue.js"></script>
+<script type="text/javascript">
+    const vue = new Vue({ // 实例化Vue对象
+        el: '#app',// 绑定作用域
+        data: { //定义数据
+           teacherId: '0',
+           clazzId:'0',
+           courseId: '0',
+            clazzs: {}, // 用来保存所在班级对象数据
+            courses:{},
+            teachers:{}
+        },
+        methods: {
+            save: function () {
+                let _this = this;
+                var data = {
+                    teacherId: _this.teacherId,
+                    clazzId: _this.clazzId,
+                    courseId: _this.courseId,
+                };
+                axios.post('http://127.0.0.1:8080/vue_student/users/insertUsers.action', data).then(result => {
+                    if (result.data.code > 0) {
+                        if (window.confirm('保存成功,是否继续添加？')) {
+                            _this.reset();
+                        } else {
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.location.reload();
+                            parent.layer.close(index);
+                        }
+                    } else {
+                        console.log('保存失败,请稍后再试');
+                    }
+                });
+            },
+            reset: function () {
+                this.pageLoad();
+            },
+            pageLoad: function () { // 页面加载
+                this.teacherId= '0';
+                this.clazzId= '0';
+                this.courseId= '0';
+            },
+            validate: function () { // 验证输入非空
+            },
+            getDate4: function () { // 日历点击事件
+                var _this = this;
+                var laydate = layui.laydate;
+                laydate.render({
+                    elem: '#birthday',
+                    show: true,
+                    done: function (value) {
+                        _this.birthday = value;
+                    }
+                })
+            },
+        },
+        created() { // 生命周期相关的函数
+            let _this = this;
+            axios.get('http://127.0.0.1:8080/vue_student/teachers/getAllTeachers.action').then(result => {
+                _this.teachers = result.data;
+            });
+            axios.get('http://127.0.0.1:8080/vue_student/course/getAllCourse.action').then(result => {
+                _this.courses = result.data;
+            });
+            axios.get('http://127.0.0.1:8080/vue_student/clazz/getAllClazz.action').then(result => {
+                _this.clazzs = result.data;
+            });
+            _this.pageLoad();
+        },
+    })
+</script>
+<!--/ 此页面业务相关的脚本-->
+
+
+</body>
+
+</html>
+

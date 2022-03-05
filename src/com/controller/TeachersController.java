@@ -3,6 +3,7 @@ package com.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.entity.Teacher;
+import com.entity.TeachingInfo;
 import com.entity.Users;
 import com.github.pagehelper.Page;
 import com.service.TeachersService;
@@ -161,6 +162,14 @@ public class TeachersController {
         map.put("page", page);
         map.put("limit", limit);
         return map;
+    }
+
+
+    // 查询全部学生用户数据 在下拉菜单中显示
+    @GetMapping(value = "getAllTeachers.action")
+    @ResponseBody // 将java对象转为json格式的数据返回
+    public List<Teacher> getAllTeachers() {
+        return teachersService.getAllTeachers();
     }
 
 
