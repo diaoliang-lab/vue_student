@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置关于学生用户表的 MyBatis映射文件 -->
+<!-- namespace：必须与对应的接口全类名一致 id:必须与对应接口的某个对应的方法名一致 -->
+<mapper namespace="com.dao.TeachersDAO">
+    <resultMap type="teacher" id="teachersMap">
+        <id property="id" column="id" />
+        <result property="username" column="username" />
+        <result property="password" column="password" />
+        <result property="realname" column="realname" />
+        <result property="sex" column="sex" />
+        <result property="age" column="age" />
+        <result property="contact" column="contact" />
+        <!-- 通过外键关联查询 返回封装Clazz对象 -->
+<!--        <association property="clazz" column="clazzid" select="com.dao.ClazzDAO.getClazzById" javaType="com.entity.Clazz" />-->
+    </resultMap>
+
+        <select id="getAllTeachers" resultMap="teachersMap">
+            select * from teacher order by id desc
+        </select>
+
+
+    <insert id="insertTeacher" parameterType="teacher">
+        insert into teacher(id,username, password, realname, age, sex, contact)
+        values (#{id},#{username}, #{password}, #{realname}, #{age}, #{sex}, #{contact})
+    </insert>
+
+    <update id="updateTeacher" parameterType="teacher">
+        update teacher set username=#{username} , password=#{password} , realname=#{realname} , sex=#{sex} ,
+                         age=#{age} , contact=#{contact}  where id=#{id}
+    </update>
+
+    <delete id="deleteTeacher" parameterType="String">
+        delete from teacher where id = #{id}
+    </delete>
+
+
+    <select id="getTeacherById" parameterType="String" resultMap="teachersMap">
+        select *
+        from teacher
+        where id = #{id}
+        order by id desc
+    </select>
+
+
+    <select id="getTeachersByLike" parameterType="teacher" resultMap="teachersMap">
+        select *  from teacher where 1=1
+        <if test="username != null and '' != username">
+            and username like CONCAT('%', CONCAT(#{username}, '%'))
+        </if>
+    </select>
+
+<!--    <select id="getUsersByCond" parameterType="users" resultMap="usersMap">-->
+<!--        select a.* , b.clazzname from users a , clazz b where 1=1 and a.clazzid = b.clazzid-->
+<!--        <if test="username != null and '' != username">-->
+<!--            and a.username = #{username}-->
+<!--        </if>-->
+<!--        <if test="password != null and '' != password">-->
+<!--            and a.password = #{password}-->
+<!--        </if>-->
+<!--        <if test="realname != null and '' != realname">-->
+<!--            and a.realname = #{realname}-->
+<!--        </if>-->
+<!--        <if test="sex != null and '' != sex">-->
+<!--            and a.sex = #{sex}-->
+<!--        </if>-->
+<!--        <if test="birthday != null and '' != birthday">-->
+<!--            and a.birthday = #{birthday}-->
+<!--        </if>-->
+<!--        <if test="clazzid != null and '' != clazzid">-->
+<!--            and a.clazzid = #{clazzid}-->
+<!--        </if>-->
+<!--        <if test="contact != null and '' != contact">-->
+<!--            and a.contact = #{contact}-->
+<!--        </if>-->
+<!--        <if test="address != null and '' != address">-->
+<!--            and a.address = #{address}-->
+<!--        </if>-->
+<!--        <if test="regdate != null and '' != regdate">-->
+<!--            and a.regdate = #{regdate}-->
+<!--        </if>-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash; 学生用户表 按条件模糊查询SQL语句 UsersDAO通过ID(getUsersByLike)调用此配置 &ndash;&gt;-->
+<!--    <select id="getUsersByLike" parameterType="users" resultMap="usersMap">-->
+<!--        select a.* , b.clazzname from users a , clazz b where 1=1 and a.clazzid = b.clazzid-->
+<!--        <if test="username != null and '' != username">-->
+<!--            and a.username like CONCAT('%', CONCAT(#{username}, '%'))-->
+<!--        </if>-->
+<!--        <if test="password != null and '' != password">-->
+<!--            and a.password like CONCAT('%', CONCAT(#{password}, '%'))-->
+<!--        </if>-->
+<!--        <if test="realname != null and '' != realname">-->
+<!--            and a.realname like CONCAT('%', CONCAT(#{realname}, '%'))-->
+<!--        </if>-->
+<!--        <if test="sex != null and '' != sex">-->
+<!--            and a.sex like CONCAT('%', CONCAT(#{sex}, '%'))-->
+<!--        </if>-->
+<!--        <if test="birthday != null and '' != birthday">-->
+<!--            and a.birthday like CONCAT('%', CONCAT(#{birthday}, '%'))-->
+<!--        </if>-->
+<!--        <if test="clazzid != null and '' != clazzid">-->
+<!--            and b.clazzname like CONCAT('%', CONCAT(#{clazzid}, '%'))-->
+<!--        </if>-->
+<!--        <if test="contact != null and '' != contact">-->
+<!--            and a.contact like CONCAT('%', CONCAT(#{contact}, '%'))-->
+<!--        </if>-->
+<!--        <if test="address != null and '' != address">-->
+<!--            and a.address like CONCAT('%', CONCAT(#{address}, '%'))-->
+<!--        </if>-->
+<!--        <if test="regdate != null and '' != regdate">-->
+<!--            and a.regdate like CONCAT('%', CONCAT(#{regdate}, '%'))-->
+<!--        </if>-->
+<!--    </select>-->
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

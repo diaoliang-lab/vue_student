@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置关于课程表的 MyBatis映射文件 -->
+<!-- namespace：必须与对应的接口全类名一致 id:必须与对应接口的某个对应的方法名一致 -->
+<mapper namespace="com.dao.CourseDAO">
+	<resultMap type="course" id="courseMap">
+		<id property="courseid" column="courseid" />
+		<result property="cno" column="cno" />
+		<result property="coursename" column="coursename" />
+		<result property="teachername" column="teachername" />
+		<result property="clazzid" column="clazzid" />
+		<result property="num" column="num" />
+		<result property="addtime" column="addtime" />
+		<result property="memo" column="memo" />
+		<result property="clazzname" column="clazzname" />
+		<!-- 通过外键关联查询 返回封装Clazz对象 -->
+		<association property="clazz" column="clazzid" select="com.dao.ClazzDAO.getClazzById" javaType="com.entity.Clazz" />
+	</resultMap>
+
+	<!-- 课程表 插入SQL语句 CourseDAO通过ID(insertCourse)调用此配置 -->
+	<insert id="insertCourse" parameterType="course">
+		insert into course(courseid , cno , coursename , teachername , clazzid , num , addtime , memo ) values(#{courseid} , #{cno} , #{coursename} , #{teachername} ,
+		#{clazzid} , #{num} , #{addtime} , #{memo} )
+	</insert>
+
+	<!-- 课程表 更新SQL语句 CourseDAO通过ID(updateCourse)调用此配置 -->
+	<update id="updateCourse" parameterType="course">
+		update course set cno=#{cno} , coursename=#{coursename} , teachername=#{teachername} , clazzid=#{clazzid} ,
+		num=#{num} , addtime=#{addtime} , memo=#{memo} where courseid=#{courseid}
+	</update>
+
+	<!-- 课程表 按主键删除SQL语句 CourseDAO通过ID(deleteCourse)调用此配置 -->
+	<delete id="deleteCourse" parameterType="String">
+		delete from course where courseid = #{courseid}
+	</delete>
+
+	<!-- 课程表 查询全部课程信息SQL语句 CourseDAO通过ID(getAllCourse)调用此配置 -->
+	<select id="getAllCourse" resultMap="courseMap">
+		select a.* , b.clazzname from course a , clazz b where 1=1 and a.clazzid = b.clazzid order by courseid desc
+	</select>
+
+	<!-- 课程表 按主键(courseid)查询SQL语句 CourseDAO通过ID(getCourseById)调用此配置 -->
+	<select id="getCourseById" parameterType="String" resultMap="courseMap">
+		select a.* , b.clazzname from course a , clazz b where 1=1 and a.clazzid = b.clazzid and
+		courseid=#{courseid} order by courseid desc
+	</select>
+
+	<!-- 课程表 按条件精确查询SQL语句 CourseDAO通过ID(getCourseByCond)调用此配置 -->
+	<select id="getCourseByCond" parameterType="course" resultMap="courseMap">
+		select a.* , b.clazzname from course a , clazz b where 1=1 and a.clazzid = b.clazzid
+		<if test="cno != null and '' != cno">
+			and a.cno = #{cno}
+		</if>
+		<if test="coursename != null and '' != coursename">
+			and a.coursename = #{coursename}
+		</if>
+		<if test="teachername != null and '' != teachername">
+			and a.teachername = #{teachername}
+		</if>
+		<if test="clazzid != null and '' != clazzid">
+			and a.clazzid = #{clazzid}
+		</if>
+		<if test="num != null and '' != num">
+			and a.num = #{num}
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime = #{addtime}
+		</if>
+		<if test="memo != null and '' != memo">
+			and a.memo = #{memo}
+		</if>
+	</select>
+
+	<!-- 课程表 按条件模糊查询SQL语句 CourseDAO通过ID(getCourseByLike)调用此配置 -->
+	<select id="getCourseByLike" parameterType="course" resultMap="courseMap">
+		select a.* , b.clazzname from course a , clazz b where 1=1 and a.clazzid = b.clazzid
+		<if test="cno != null and '' != cno">
+			and a.cno like CONCAT('%', CONCAT(#{cno}, '%'))
+		</if>
+		<if test="coursename != null and '' != coursename">
+			and a.coursename like CONCAT('%', CONCAT(#{coursename}, '%'))
+		</if>
+		<if test="teachername != null and '' != teachername">
+			and a.teachername like CONCAT('%', CONCAT(#{teachername}, '%'))
+		</if>
+		<if test="clazzid != null and '' != clazzid">
+			and b.clazzname like CONCAT('%', CONCAT(#{clazzid}, '%'))
+		</if>
+		<if test="num != null and '' != num">
+			and a.num like CONCAT('%', CONCAT(#{num}, '%'))
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime like CONCAT('%', CONCAT(#{addtime}, '%'))
+		</if>
+		<if test="memo != null and '' != memo">
+			and a.memo like CONCAT('%', CONCAT(#{memo}, '%'))
+		</if>
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

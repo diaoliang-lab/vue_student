@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>添加学生成绩信息</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="./hui/css/H-ui.min.css" />
+	<link rel="stylesheet" type="text/css" href="./hui/css/H-ui.admin.css" />
+	<link rel="stylesheet" type="text/css" href="./hui/Hui-iconfont/1.0.8/iconfont.css" />
+	<link rel="stylesheet" type="text/css" href="./hui/layui/css/layui.css" />
+</head>
+
+<body>
+
+	<div id="app">
+		<article class="page-container">
+			<div class="form form-horizontal" id="form-admin-add">
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3">学生：</label>
+					<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+							<select class="select" v-model="usersid">
+								<option :value="0">---请选择学生---</option>
+								<option :value="item.usersid" v-for="item in users">{{ item.realname }}</option>
+							</select>
+						</span> </div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3">课程：</label>
+					<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+							<select class="select" v-model="courseid">
+								<option :value="0">---请选择课程---</option>
+								<option :value="item.courseid" v-for="item in course">{{ item.coursename }}</option>
+							</select>
+						</span> </div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3">成绩：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="num" v-model="num" placeholder="请输入成绩">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3">备注：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" id="memo" v-model="memo" placeholder="请输入备注">
+					</div>
+				</div>
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+						<button class="btn btn-secondary radius" @click.prevent="save()"><i
+								class="Hui-iconfont">&#xe632;</i>提交保存</button>
+						<button class="btn btn-default radius" @click.prevent="reset()">
+							<i class="Hui-iconfont">&#xe68f;</i>取消重置
+						</button>
+					</div>
+				</div>
+			</div>
+		</article>
+	</div>
+
+	<script type="text/javascript" src="./hui/jquery/1.9.1/jquery.min.js"></script>
+	<script type="text/javascript" src="./hui/js/H-ui.min.js"></script>
+	<script type="text/javascript" src="./hui/js/H-ui.admin.js"></script>
+
+	<!--此页面业务相关的脚本-->
+	<script type="text/javascript" src="./hui/layui/layui.js"></script>
+	<script type="text/javascript" src="./hui/js/axios.min.js"></script>
+	<script type="text/javascript" src="./hui/js/vue.js"></script>
+	<script type="text/javascript">
+		const vue = new Vue({ // 实例化Vue对象
+			el: '#app',// 绑定作用域
+			data: { //定义数据
+				usersid: '0', // 定义学生数据
+				courseid: '0', // 定义课程数据
+				num: '', // 定义成绩数据
+				memo: '', // 定义备注数据
+				users: {}, // 用来保存学生对象数据
+				course: {}, // 用来保存课程对象数据
+			},
+			methods: {
+				save: function () {
+					let _this = this;
+					var data = {
+						usersid: _this.usersid,
+						courseid: _this.courseid,
+						num: _this.num,
+						memo: _this.memo,
+					};
+					axios.post('http://127.0.0.1:8080/vue_student/score/insertScore.action', data).then(result => {
+						if (result.data.code > 0) {
+							if (window.confirm('保存成功,是否继续添加？')) {
+								_this.reset();
+							} else {
+								var index = parent.layer.getFrameIndex(window.name);
+								parent.location.reload();
+								parent.layer.close(index);
+							}
+						} else {
+							console.log('保存失败,请稍后再试');
+						}
+					});
+				},
+				reset: function () {
+					this.pageLoad();
+				},
+				pageLoad: function () { // 页面加载
+					this.usersid= '0';
+					this.courseid= '0';
+					this.num= '';
+					this.memo= '';
+				},
+				validate: function () { // 验证输入非空
+				},
+			},
+			created() { // 生命周期相关的函数
+				let _this = this;
+				axios.get('http://127.0.0.1:8080/vue_student/users/getAllUsers.action').then(result => {
+					_this.users = result.data;
+				});
+				axios.get('http://127.0.0.1:8080/vue_student/course/getAllCourse.action').then(result => {
+					_this.course = result.data;
+				});
+				_this.pageLoad();
+			},
+		})
+	</script>
+	<!--/ 此页面业务相关的脚本-->
+
+
+</body>
+
+</html>
+

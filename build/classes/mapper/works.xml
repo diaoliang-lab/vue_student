@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置关于勤工俭学表的 MyBatis映射文件 -->
+<!-- namespace：必须与对应的接口全类名一致 id:必须与对应接口的某个对应的方法名一致 -->
+<mapper namespace="com.dao.WorksDAO">
+	<resultMap type="works" id="worksMap">
+		<id property="worksid" column="worksid" />
+		<result property="worksname" column="worksname" />
+		<result property="cateid" column="cateid" />
+		<result property="salary" column="salary" />
+		<result property="thestart" column="thestart" />
+		<result property="theend" column="theend" />
+		<result property="address" column="address" />
+		<result property="hits" column="hits" />
+		<result property="addtime" column="addtime" />
+		<result property="contents" column="contents" />
+		<result property="catename" column="catename" />
+		<!-- 通过外键关联查询 返回封装Cate对象 -->
+		<association property="cate" column="cateid" select="com.dao.CateDAO.getCateById" javaType="com.entity.Cate" />
+	</resultMap>
+
+	<!-- 勤工俭学表 插入SQL语句 WorksDAO通过ID(insertWorks)调用此配置 -->
+	<insert id="insertWorks" parameterType="works">
+		insert into works(worksid , worksname , cateid , salary , thestart , theend , address , hits , addtime , contents ) values(#{worksid} , #{worksname} , #{cateid} ,
+		#{salary} , #{thestart} , #{theend} , #{address} , #{hits} , #{addtime} , #{contents} )
+	</insert>
+
+	<!-- 勤工俭学表 更新SQL语句 WorksDAO通过ID(updateWorks)调用此配置 -->
+	<update id="updateWorks" parameterType="works">
+		update works set worksname=#{worksname} , cateid=#{cateid} , salary=#{salary} , thestart=#{thestart} ,
+		theend=#{theend} , address=#{address} , hits=#{hits} , addtime=#{addtime} , contents=#{contents} where worksid=#{worksid}
+	</update>
+
+	<!-- 勤工俭学表 按主键删除SQL语句 WorksDAO通过ID(deleteWorks)调用此配置 -->
+	<delete id="deleteWorks" parameterType="String">
+		delete from works where worksid = #{worksid}
+	</delete>
+
+	<!-- 勤工俭学表 查询全部勤工俭学信息SQL语句 WorksDAO通过ID(getAllWorks)调用此配置 -->
+	<select id="getAllWorks" resultMap="worksMap">
+		select a.* , b.catename from works a , cate b where 1=1 and a.cateid = b.cateid order by worksid desc
+	</select>
+
+	<!-- 勤工俭学表 按主键(worksid)查询SQL语句 WorksDAO通过ID(getWorksById)调用此配置 -->
+	<select id="getWorksById" parameterType="String" resultMap="worksMap">
+		select a.* , b.catename from works a , cate b where 1=1 and a.cateid = b.cateid and
+		worksid=#{worksid} order by worksid desc
+	</select>
+
+	<!-- 勤工俭学表 按条件精确查询SQL语句 WorksDAO通过ID(getWorksByCond)调用此配置 -->
+	<select id="getWorksByCond" parameterType="works" resultMap="worksMap">
+		select a.* , b.catename from works a , cate b where 1=1 and a.cateid = b.cateid
+		<if test="worksname != null and '' != worksname">
+			and a.worksname = #{worksname}
+		</if>
+		<if test="cateid != null and '' != cateid">
+			and a.cateid = #{cateid}
+		</if>
+		<if test="salary != null and '' != salary">
+			and a.salary = #{salary}
+		</if>
+		<if test="thestart != null and '' != thestart">
+			and a.thestart = #{thestart}
+		</if>
+		<if test="theend != null and '' != theend">
+			and a.theend = #{theend}
+		</if>
+		<if test="address != null and '' != address">
+			and a.address = #{address}
+		</if>
+		<if test="hits != null and '' != hits">
+			and a.hits = #{hits}
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime = #{addtime}
+		</if>
+		<if test="contents != null and '' != contents">
+			and a.contents = #{contents}
+		</if>
+	</select>
+
+	<!-- 勤工俭学表 按条件模糊查询SQL语句 WorksDAO通过ID(getWorksByLike)调用此配置 -->
+	<select id="getWorksByLike" parameterType="works" resultMap="worksMap">
+		select a.* , b.catename from works a , cate b where 1=1 and a.cateid = b.cateid
+		<if test="worksname != null and '' != worksname">
+			and a.worksname like CONCAT('%', CONCAT(#{worksname}, '%'))
+		</if>
+		<if test="cateid != null and '' != cateid">
+			and b.catename like CONCAT('%', CONCAT(#{cateid}, '%'))
+		</if>
+		<if test="salary != null and '' != salary">
+			and a.salary like CONCAT('%', CONCAT(#{salary}, '%'))
+		</if>
+		<if test="thestart != null and '' != thestart">
+			and a.thestart like CONCAT('%', CONCAT(#{thestart}, '%'))
+		</if>
+		<if test="theend != null and '' != theend">
+			and a.theend like CONCAT('%', CONCAT(#{theend}, '%'))
+		</if>
+		<if test="address != null and '' != address">
+			and a.address like CONCAT('%', CONCAT(#{address}, '%'))
+		</if>
+		<if test="hits != null and '' != hits">
+			and a.hits like CONCAT('%', CONCAT(#{hits}, '%'))
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime like CONCAT('%', CONCAT(#{addtime}, '%'))
+		</if>
+		<if test="contents != null and '' != contents">
+			and a.contents like CONCAT('%', CONCAT(#{contents}, '%'))
+		</if>
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

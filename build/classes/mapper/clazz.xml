@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置关于班级表的 MyBatis映射文件 -->
+<!-- namespace：必须与对应的接口全类名一致 id:必须与对应接口的某个对应的方法名一致 -->
+<mapper namespace="com.dao.ClazzDAO">
+	<resultMap type="clazz" id="clazzMap">
+		<id property="clazzid" column="clazzid" />
+		<result property="clazzname" column="clazzname" />
+		<result property="manager" column="manager" />
+		<result property="contact" column="contact" />
+		<result property="addtime" column="addtime" />
+		<result property="memo" column="memo" />
+	</resultMap>
+
+	<!-- 班级表 插入SQL语句 ClazzDAO通过ID(insertClazz)调用此配置 -->
+	<insert id="insertClazz" parameterType="clazz">
+		insert into clazz(clazzid , clazzname , manager , contact , addtime , memo ) values(#{clazzid} , #{clazzname} , #{manager} , #{contact} , #{addtime} , #{memo} )
+	</insert>
+
+	<!-- 班级表 更新SQL语句 ClazzDAO通过ID(updateClazz)调用此配置 -->
+	<update id="updateClazz" parameterType="clazz">
+		update clazz set clazzname=#{clazzname} , manager=#{manager} , contact=#{contact} , addtime=#{addtime} ,
+		memo=#{memo} where clazzid=#{clazzid}
+	</update>
+
+	<!-- 班级表 按主键删除SQL语句 ClazzDAO通过ID(deleteClazz)调用此配置 -->
+	<delete id="deleteClazz" parameterType="String">
+		delete from clazz where clazzid = #{clazzid}
+	</delete>
+
+	<!-- 班级表 查询全部班级信息SQL语句 ClazzDAO通过ID(getAllClazz)调用此配置 -->
+	<select id="getAllClazz" resultMap="clazzMap">
+		select a.* from clazz a where 1=1 order by clazzid desc
+	</select>
+
+	<!-- 班级表 按主键(clazzid)查询SQL语句 ClazzDAO通过ID(getClazzById)调用此配置 -->
+	<select id="getClazzById" parameterType="String" resultMap="clazzMap">
+		select a.* from clazz a where 1=1 and clazzid=#{clazzid} order by clazzid desc
+	</select>
+
+	<!-- 班级表 按条件精确查询SQL语句 ClazzDAO通过ID(getClazzByCond)调用此配置 -->
+	<select id="getClazzByCond" parameterType="clazz" resultMap="clazzMap">
+		select a.* from clazz a where 1=1
+		<if test="clazzname != null and '' != clazzname">
+			and a.clazzname = #{clazzname}
+		</if>
+		<if test="manager != null and '' != manager">
+			and a.manager = #{manager}
+		</if>
+		<if test="contact != null and '' != contact">
+			and a.contact = #{contact}
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime = #{addtime}
+		</if>
+		<if test="memo != null and '' != memo">
+			and a.memo = #{memo}
+		</if>
+	</select>
+
+	<!-- 班级表 按条件模糊查询SQL语句 ClazzDAO通过ID(getClazzByLike)调用此配置 -->
+	<select id="getClazzByLike" parameterType="clazz" resultMap="clazzMap">
+		select a.* from clazz a where 1=1
+		<if test="clazzname != null and '' != clazzname">
+			and a.clazzname like CONCAT('%', CONCAT(#{clazzname}, '%'))
+		</if>
+		<if test="manager != null and '' != manager">
+			and a.manager like CONCAT('%', CONCAT(#{manager}, '%'))
+		</if>
+		<if test="contact != null and '' != contact">
+			and a.contact like CONCAT('%', CONCAT(#{contact}, '%'))
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime like CONCAT('%', CONCAT(#{addtime}, '%'))
+		</if>
+		<if test="memo != null and '' != memo">
+			and a.memo like CONCAT('%', CONCAT(#{memo}, '%'))
+		</if>
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
