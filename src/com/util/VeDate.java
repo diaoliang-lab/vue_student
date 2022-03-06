@@ -4,9 +4,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
@@ -407,6 +405,13 @@ public class VeDate {
 	public static String getTimeStr(Integer time){
 		LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(time), ZoneId.systemDefault());
 		return localDateTime.format(DateTimeFormatter.ISO_DATE);
+	}
+
+	public static Integer getTimeStamp(String time) {
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate parse = LocalDate.parse(time, dateTimeFormatter);
+		return (int) parse.atStartOfDay().toEpochSecond(ZoneOffset.ofHours(8));
+
 	}
 }
 

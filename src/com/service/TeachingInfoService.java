@@ -14,4 +14,8 @@ public interface TeachingInfoService {
     TeachingInfo getTeachingInfoById(String id);
 
     List<TeachingInfo> getTeachingInfosByCourseId(String courseId);
+
+    int insertTeachingInfo(TeachingInfo teachingInfo);
+
+    int updateTeachingInfo(TeachingInfo teachingInfo);
 }

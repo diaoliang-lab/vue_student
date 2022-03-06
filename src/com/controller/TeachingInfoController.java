@@ -1,15 +1,18 @@
 package com.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.entity.Course;
 import com.entity.TeachingInfo;
 import com.entity.Users;
 import com.github.pagehelper.Page;
 import com.service.CourseService;
 import com.service.TeachingInfoService;
+import com.util.VeDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,9 +68,9 @@ public class TeachingInfoController {
     }
 
     // 按主键批量删除学生用户
-    @PostMapping(value = "deleteUsersByIds.action")
+    @PostMapping(value = "deleteTeachingInfoByIds.action")
     @ResponseBody // 将java对象转为json格式的数据返回
-    public Map<String, Object> deleteUsersByIds(@RequestBody String[] ids) {
+    public Map<String, Object> deleteTeachingInfoByIds(@RequestBody String[] ids) {
         int num = 0;
         for (String id : ids) {
             num += this.teachingInfoService.deleteTeachingInfo(id);
@@ -91,6 +94,8 @@ public class TeachingInfoController {
     @ResponseBody // 将java对象转为json格式的数据返回
     public TeachingInfo getTeachingInfoById(String id) {
         TeachingInfo teachingInfo = this.teachingInfoService.getTeachingInfoById(id);
+        teachingInfo.setBeginTimeStr(VeDate.getTimeStr(teachingInfo.getBeginTime()));
+        teachingInfo.setEndTimeStr(VeDate.getTimeStr(teachingInfo.getEndTime()));
         return teachingInfo;
     }
 
@@ -118,6 +123,57 @@ public class TeachingInfoController {
         map.put("msg", "");
         map.put("page", page);
         map.put("limit", limit);
+        return map;
+    }
+
+    // 新增学生用户
+    @PostMapping(value = "insertTeachingInfo.action")
+    @ResponseBody // 将java对象转为json格式的数据返回
+    public Map<String, Object> insertTeachingInfo(@RequestBody String jsonStr) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        JSONObject obj = JSONObject.parseObject(jsonStr); // 将JSON字符串转换成object
+        TeachingInfo teachingInfo = new TeachingInfo();
+        teachingInfo.setClazzId(obj.getString("clazzId"));
+        teachingInfo.setCourseId(obj.getString("courseId"));
+        teachingInfo.setTeacherId(obj.getString("teacherId"));
+        teachingInfo.setBeginTime(VeDate.getTimeStamp(obj.getString("beginTimeStr")));
+        teachingInfo.setEndTime(VeDate.getTimeStamp(obj.getString("endTimeStr")));
+        int num = this.teachingInfoService.insertTeachingInfo(teachingInfo);
+        if (num > 0) {
+            map.put("success", true);
+            map.put("code", num);
+            map.put("message", "保存成功");
+        } else {
+            map.put("success", false);
+            map.put("code", num);
+            map.put("message", "保存失败");
+        }
+        return map;
+    }
+
+    // 修改学生用户
+    @PostMapping(value = "updateTeachingInfo.action")
+    @ResponseBody // 将java对象转为json格式的数据返回
+    public Map<String, Object> updateTeachingInfo(@RequestBody String jsonStr) {
+        JSONObject obj = JSONObject.parseObject(jsonStr); // 将JSON字符串转换成object
+        TeachingInfo teachingInfo = this.teachingInfoService.getTeachingInfoById(obj.getString("id")); // 获取object中usersid字段
+        teachingInfo.setClazzId(obj.getString("clazzId"));
+        teachingInfo.setCourseId(obj.getString("courseId"));
+        teachingInfo.setTeacherId(obj.getString("teacherId"));
+        teachingInfo.setBeginTime(VeDate.getTimeStamp(obj.getString("beginTimeStr")));
+        teachingInfo.setEndTime(VeDate.getTimeStamp(obj.getString("endTimeStr")));
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        int num = this.teachingInfoService.updateTeachingInfo(teachingInfo);
+        if (num > 0) {
+            map.put("success", true);
+            map.put("code", num);
+            map.put("message", "修改成功");
+        } else {
+            map.put("success", false);
+            map.put("code", num);
+            map.put("message", "修改失败");
+        }
         return map;
     }
 

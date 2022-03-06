@@ -49,8 +49,8 @@
           and a.clazz_id = b.clazzid
           and a.teacher_id = c.id
           and a.course_id = d.courseid
-          and id = #{id}
-        order by id desc
+          and a.id = #{id}
+        order by a.id desc
     </select>
 
     <!-- 学生用户表 按主键(usersid)查询SQL语句 UsersDAO通过ID(getUsersById)调用此配置 -->
@@ -69,24 +69,18 @@
     </select>
 
 
+    <!-- 学生用户表 插入SQL语句 UsersDAO通过ID(insertUsers)调用此配置 -->
+    <insert id="insertTeachingInfo" parameterType="teachingInfo">
+        insert into teaching_info(id, course_id, teacher_id, clazz_id, begin_time, end_time)
+        values ( #{id}, #{courseId}, #{teacherId}
+               , #{clazzId}, #{beginTime}, #{endTime})
+    </insert>
 
-
-    <!--    &lt;!&ndash; 学生用户表 插入SQL语句 UsersDAO通过ID(insertUsers)调用此配置 &ndash;&gt;-->
-<!--    <insert id="insertUsers" parameterType="users">-->
-<!--        insert into users(usersid , username , password , realname , sex , birthday , clazzid , contact , address , regdate ) values(#{usersid} , #{username} , #{password}-->
-<!--                                                                                                                                    , #{realname} , #{sex} , #{birthday} , #{clazzid} , #{contact} , #{address} , #{regdate} )-->
-<!--    </insert>-->
-
-<!--    &lt;!&ndash; 学生用户表 更新SQL语句 UsersDAO通过ID(updateUsers)调用此配置 &ndash;&gt;-->
-<!--    <update id="updateUsers" parameterType="users">-->
-<!--        update users set username=#{username} , password=#{password} , realname=#{realname} , sex=#{sex} ,-->
-<!--                         birthday=#{birthday} , clazzid=#{clazzid} , contact=#{contact} , address=#{address} , regdate=#{regdate} where usersid=#{usersid}-->
-<!--    </update>-->
-
-<!--    &lt;!&ndash; 学生用户表 按主键删除SQL语句 UsersDAO通过ID(deleteUsers)调用此配置 &ndash;&gt;-->
-<!--    <delete id="deleteUsers" parameterType="String">-->
-<!--        delete from users where usersid = #{usersid}-->
-<!--    </delete>-->
+    <!-- 学生用户表 更新SQL语句 UsersDAO通过ID(updateUsers)调用此配置 -->
+    <update id="updateTeachingInfo" parameterType="teachingInfo">
+        update teaching_info set course_id=#{courseId} , teacher_id=#{teacherId} , clazz_id=#{clazzId} , begin_time=#{beginTime} ,
+                        end_time=#{endTime} where id=#{id}
+    </update>
 
 
 

@@ -17,5 +17,9 @@ public interface TeachingInfoDAO {
 
     List<TeachingInfo> getTeachingInfosByCourseId(String courseId);
 
+    int insertTeachingInfo(TeachingInfo teachingInfo);
+
+    int updateTeachingInfo(TeachingInfo teachingInfo);
+
 
 }

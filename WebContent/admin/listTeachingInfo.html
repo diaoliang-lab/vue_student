@@ -114,10 +114,10 @@
                     });
                 })
             },
-            deleteTeacher: function (id) { // 根据主键删除学生用户信息
+            deleteTeachingInfo: function (id) { // 根据主键删除学生用户信息
                 let _this = this;
                 if (window.confirm('确定要删除这条记录吗？')) {
-                    axios.get('http://127.0.0.1:8080/vue_student/teachingInfo/deleteTeacherInfo.action?id=' + id).then(result => {
+                    axios.get('http://127.0.0.1:8080/vue_student/teachingInfo/deleteTeachingInfo.action?id=' + id).then(result => {
                         if (result.data.code > 0) {
                             _this.loadTable();
                         } else {
@@ -148,7 +148,7 @@
                     }
                 });
             },
-            getTeacherById: function (id) { // 编辑按钮点击事件
+            getTeachingInfoById: function (id) { // 编辑按钮点击事件
                 let url = 'editTeachingInfo.html?id=' + id;
                 layer_show('编辑授课信息', url, '', '');
             },

@@ -38,4 +38,14 @@ public class TeachingInfoServiceImpl implements TeachingInfoService {
     public List<TeachingInfo> getTeachingInfosByCourseId(String courseId) {
         return teachingInfoDAO.getTeachingInfosByCourseId(courseId);
     }
+
+    @Override
+    public int insertTeachingInfo(TeachingInfo teachingInfo) {
+        return teachingInfoDAO.insertTeachingInfo(teachingInfo);
+    }
+
+    @Override
+    public int updateTeachingInfo(TeachingInfo teachingInfo) {
+        return teachingInfoDAO.updateTeachingInfo(teachingInfo);
+    }
 }
